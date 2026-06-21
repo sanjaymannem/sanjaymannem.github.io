@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjay Mannem — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --muted: #888899;
+    --accent: #7c6af7;
+    --accent2: #a78bfa;
+    --accent3: #06d6a0;
+    --accent4: #f59e0b;
+    --grad: linear-gradient(135deg, #7c6af7 0%, #06d6a0 100%);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,106,247,0.1);
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .hero-gradient {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    font-weight: 400;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover { background: #6a58e8; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+
+  .btn-outline:hover { background: var(--bg3); border-color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; }
+  .stat-num { font-size: 2rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+  /* ── Sections ── */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 0 2rem;
+  }
+
+  /* ── Skills ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .skill-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .skill-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+  }
+
+  /* ── Experience ── */
+  .timeline { position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border2);
+  }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .exp-dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
+  }
+
+  .exp-body {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .exp-body:hover { border-color: var(--border2); }
+
+  .exp-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+  }
+
+  .exp-title { font-size: 1.05rem; font-weight: 600; }
+  .exp-company { color: var(--accent2); font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem; }
+  .exp-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .exp-bullets { list-style: none; }
+
+  .exp-bullets li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .exp-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent3);
+    font-size: 0.75rem;
+    top: 2px;
+  }
+
+  .exp-bullets li strong { color: var(--text); font-weight: 500; }
+
+  /* ── Projects ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .project-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+
+  .project-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; flex: 1; }
+
+  .project-metric {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(6,214,160,0.1);
+    border: 1px solid rgba(6,214,160,0.2);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent3);
+    margin-top: 1rem;
+    align-self: flex-start;
+  }
+
+  /* ── Contact ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .contact-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .contact-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-card h4 { font-size: 0.875rem; font-weight: 600; }
+  .contact-card p { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span { color: var(--accent2); }
+
+  /* ── Scroll animation ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem; }
+    .nav-links { gap: 1rem; }
+    .hero-stats { gap: 1.5rem; }
+    .timeline::before { display: none; }
+    .exp-item { grid-template-columns: 1fr; }
+    .exp-dot { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">SM</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero" id="about">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Open to opportunities
+  </div>
+  <h1>Sanjay<br><span class="hero-gradient">Mannem</span></h1>
+  <p class="hero-sub">Software Engineer 3 specializing in Python backend systems, AI agent architectures, and MCP ecosystems. Building the infrastructure that powers intelligent software.</p>
+  <div class="hero-cta">
+    <a href="#experience" class="btn btn-primary">View Experience</a>
+    <a href="mailto:sanjaymannem1@gmail.com" class="btn btn-outline">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">7+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">MCP Servers Built</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">50%</div>
+      <div class="stat-label">Latency Reduced</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Skills -->
+<section id="skills" class="fade-in">
+  <span class="section-tag">// expertise</span>
+  <h2>Technical Skills</h2>
+  <p class="section-sub">The tools and technologies I work with day to day.</p>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(124,106,247,0.15);">🤖</div>
+      <h3>AI &amp; Agent Stack</h3>
+      <div class="skill-tags">
+        <span class="tag">LangChain</span>
+        <span class="tag">LlamaIndex</span>
+        <span class="tag">MCP</span>
+        <span class="tag">LLM Integration</span>
+        <span class="tag">RAG Pipelines</span>
+        <span class="tag">Prompt Engineering</span>
+        <span class="tag">Agent Orchestration</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(6,214,160,0.15);">⚡</div>
+      <h3>Backend Development</h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">asyncio</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Redis</span>
+        <span class="tag">RabbitMQ</span>
+        <span class="tag">REST APIs</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(245,158,11,0.15);">☁️</div>
+      <h3>Cloud &amp; Infrastructure</h3>
+      <div class="skill-tags">
+        <span class="tag">AWS ECS</span>
+        <span class="tag">EventBridge</span>
+        <span class="tag">S3</span>
+        <span class="tag">DynamoDB</span>
+        <span class="tag">Lambda</span>
+        <span class="tag">EC2</span>
+        <span class="tag">Terraform</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(239,68,68,0.15);">🔧</div>
+      <h3>DevOps &amp; Tooling</h3>
+      <div class="skill-tags">
+        <span class="tag">Jenkins</span>
+        <span class="tag">Docker</span>
+        <span class="tag">LightStep</span>
+        <span class="tag">Grafana</span>
+        <span class="tag">Kibana</span>
+        <span class="tag">Jira</span>
+        <span class="tag">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(167,139,250,0.15);">🐍</div>
+      <h3>Python Ecosystem</h3>
+      <div class="skill-tags">
+        <span class="tag">pandas</span>
+        <span class="tag">pytest</span>
+        <span class="tag">boto3</span>
+        <span class="tag">aiomultiprocess</span>
+        <span class="tag">psycopg2</span>
+        <span class="tag">Streamlit</span>
+        <span class="tag">SQLAlchemy</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon" style="background:rgba(6,214,160,0.15);">🌐</div>
+      <h3>Frontend</h3>
+      <div class="skill-tags">
+        <span class="tag">Vue.js</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">Streamlit</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Experience -->
+<section id="experience" class="fade-in">
+  <span class="section-tag">// career</span>
+  <h2>Experience</h2>
+  <p class="section-sub">A track record of building, shipping, and improving at scale.</p>
+
+  <div class="timeline">
+
+    <!-- JPMC -->
+    <div class="exp-item">
+      <div class="exp-dot" style="background:rgba(124,106,247,0.2); border:1px solid rgba(124,106,247,0.4);">🏦</div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Software Engineer 3</div>
+            <div class="exp-company">JPMorgan Chase &amp; Co. (JPMC) · Hyderabad</div>
+          </div>
+          <span class="exp-date">Present</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Engineered a <strong>high-performance MCP Registry backend</strong> using Python FastAPI — serving 10+ internal MCP servers with sub-50ms p95 response times.</li>
+          <li>Built an <strong>Agent Registry backend</strong> with FastAPI + PostgreSQL + Redis, achieving <strong>3× throughput improvement</strong> over the initial prototype.</li>
+          <li>Optimized FastAPI registry services via async I/O, connection pooling, and query tuning — <strong>45% latency reduction</strong>, <strong>60% faster DB queries</strong>.</li>
+          <li>Designed and published reusable <strong>MCP packages</strong> (mcp-auth, mcp-schema-validator, mcp-gateway) adopted across 4 teams, cutting integration boilerplate by 60%.</li>
+          <li>Led <strong>cross-team MCP onboarding</strong> — authored integration guides, conducted workshops, onboarded 3 product teams.</li>
+          <li>Built agent orchestration pipelines with <strong>LangChain &amp; LlamaIndex</strong> — multi-step reasoning over financial data with tool-calling and memory management.</li>
+          <li>Implemented <strong>OAuth2 security hardening</strong> for MCP agents: input sanitization, prompt injection guardrails, rate limiting, and audit logging.</li>
+          <li>Authored <strong>Terraform scripts</strong> to provision AWS ECS clusters, DynamoDB tables, S3 buckets, and EventBridge rules for registry infrastructure.</li>
+          <li>Deployed registries on <strong>AWS ECS (Fargate)</strong> with EventBridge for event-driven agent lifecycle routing and S3 for versioned tool manifest storage.</li>
+          <li>Built <strong>Jenkins CI/CD pipelines</strong> automating build, test, Docker publish, and ECS deployment — reducing release cycle time by <strong>50%</strong>.</li>
+          <li>Co-organized <strong>FixIt Days</strong> — achieved 30% reduction in P1/P2 issues and eliminated 15+ recurring CI failures.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FactSet -->
+    <div class="exp-item">
+      <div class="exp-dot" style="background:rgba(6,214,160,0.2); border:1px solid rgba(6,214,160,0.4);">📊</div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Software Engineer 3 <span style="color:var(--muted); font-weight:400; font-size:0.85rem;">(Promoted from SE2)</span></div>
+            <div class="exp-company">FactSet Research Systems · Hyderabad</div>
+          </div>
+          <span class="exp-date">May 2022 – Present</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Designed and implemented robust <strong>REST APIs using Python FastAPI</strong> with async support for high-throughput financial data endpoints.</li>
+          <li>Integrated <strong>LLMs for advanced NLP tasks</strong> — metadata extraction, content generation, and predictive analytics over financial datasets.</li>
+          <li>Led end-to-end ownership of major application features using FastAPI and Vue.js — design through deployment.</li>
+          <li>Built ML-driven extraction pipeline reducing <strong>manual metadata processing time by 50%</strong>.</li>
+          <li>Leveraged <strong>AWS (S3, Lambda, EC2, DynamoDB, IAM, CloudWatch)</strong> and Redis caching to optimize performance and infrastructure costs.</li>
+          <li>Implemented <strong>RabbitMQ</strong> for asynchronous task handling, improving system responsiveness under peak load.</li>
+          <li>Developed internal utility tools with <strong>Streamlit</strong> to enhance team productivity and streamline data workflows.</li>
+          <li>Integrated <strong>LightStep</strong> for API tracing, improving issue resolution time by 40%.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Thomson Reuters -->
+    <div class="exp-item">
+      <div class="exp-dot" style="background:rgba(245,158,11,0.2); border:1px solid rgba(245,158,11,0.4);">📰</div>
+      <div class="exp-body">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Associate Software Engineer</div>
+            <div class="exp-company">Thomson Reuters · Hyderabad</div>
+          </div>
+          <span class="exp-date">Aug 2019 – May 2022</span>
+        </div>
+        <ul class="exp-bullets">
+          <li>Automated storage tasks and audit processes using <strong>Python</strong>, reducing manual overhead significantly.</li>
+          <li>Created <strong>Grafana dashboards</strong> integrated with MySQL and Python for real-time storage controller monitoring.</li>
+          <li>Managed SnapMirror relationships, SnapVault backups, volume resizing, and LUN health checks across production environments.</li>
+          <li>Generated <strong>detailed performance reports</strong> (daily/weekly/monthly) using Python automation.</li>
+          <li>Mentored junior engineers and coordinated with vendors to resolve critical environment issues.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Projects -->
+<section id="projects" class="fade-in">
+  <span class="section-tag">// work</span>
+  <h2>Key Projects</h2>
+  <p class="section-sub">Highlights from my most impactful engineering work.</p>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-icon">🔐</div>
+      <h3>Secure MCP Registry &amp; Package Suite</h3>
+      <p>Centralized MCP registry with OAuth2 access control, versioning, and tool manifest storage. Published mcp-auth, mcp-schema-validator, and mcp-gateway packages adopted across 4 internal teams.</p>
+      <span class="project-metric">↓ 60% integration boilerplate</span>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🤖</div>
+      <h3>Agent Orchestration Platform</h3>
+      <p>Multi-step LLM agent pipelines with LangChain/LlamaIndex for automated financial data reasoning — integrating tool-calling, memory, and guardrails against prompt injection.</p>
+      <span class="project-metric">3× throughput improvement</span>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🧠</div>
+      <h3>Metadata Prediction using LLM</h3>
+      <p>Deployed a production system for automating metadata extraction from financial tables using large language models, replacing manual workflows at scale.</p>
+      <span class="project-metric">↓ 50% processing time</span>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🏗️</div>
+      <h3>AWS Infrastructure via Terraform</h3>
+      <p>Provisioned ECS clusters, DynamoDB tables, S3 buckets, and EventBridge rules for all registry services. Automated deployments via Jenkins CI/CD with Docker image publishing.</p>
+      <span class="project-metric">↓ 50% release cycle time</span>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">📐</div>
+      <h3>Data Normalization Tool</h3>
+      <p>Led development and upgrade of a data normalization tool for financial data collection, improving user efficiency with a redesigned workflow engine.</p>
+      <span class="project-metric">↑ 35% user efficiency</span>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🔭</div>
+      <h3>LightStep API Tracing</h3>
+      <p>Deployed and configured LightStep distributed tracing across financial data APIs, enabling deep performance visibility and faster root cause analysis.</p>
+      <span class="project-metric">↓ 40% resolution time</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Contact -->
+<section id="contact" class="fade-in">
+  <span class="section-tag">// reach out</span>
+  <h2>Get In Touch</h2>
+  <p class="section-sub">I'm always open to interesting conversations, collaborations, or opportunities.</p>
+
+  <div class="contact-grid">
+    <a href="mailto:sanjaymannem1@gmail.com" class="contact-card">
+      <div class="contact-icon" style="background:rgba(124,106,247,0.15);">✉️</div>
+      <div>
+        <h4>Email</h4>
+        <p>sanjaymannem1@gmail.com</p>
+      </div>
+    </a>
+    <a href="https://linkedin.com/in/sanjaymannem" target="_blank" class="contact-card">
+      <div class="contact-icon" style="background:rgba(6,214,160,0.15);">💼</div>
+      <div>
+        <h4>LinkedIn</h4>
+        <p>linkedin.com/in/sanjaymannem</p>
+      </div>
+    </a>
+    <a href="tel:+918466875725" class="contact-card">
+      <div class="contact-icon" style="background:rgba(245,158,11,0.15);">📱</div>
+      <div>
+        <h4>Phone</h4>
+        <p>+91 84668 75725</p>
+      </div>
+    </a>
+    <div class="contact-card" style="cursor:default;">
+      <div class="contact-icon" style="background:rgba(239,68,68,0.15);">📍</div>
+      <div>
+        <h4>Location</h4>
+        <p>Hyderabad, India</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with ♥ · <span>Sanjay Mannem</span> · 2025</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
